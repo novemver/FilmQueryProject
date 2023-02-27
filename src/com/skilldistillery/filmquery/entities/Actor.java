@@ -10,7 +10,6 @@ public class Actor {
 	private List<Actor> actor;
 
 	public Actor() {
-
 	}
 
 	public Actor(int id, String fn, String ln) {
@@ -53,7 +52,7 @@ public class Actor {
 
 	@Override
 	public String toString() {
-		return "\n ID: " + id + " Name: " + firstName + " " + lastName;
+		return "\tActor Name: " + firstName + " " + lastName;
 	}
 
 	@Override

@@ -151,8 +151,9 @@ public class Film {
 
 	@Override
 	public String toString() {
-		return "Film ID: " + id + ", title: " + title + ", releaseYear: " + releaseYear + ", rating: " + rating
-				+ ", description: " + description + ", Language: " + langName + "\n Cast: " + cast;
+		String cleanCast = cast.toString().replace("[", "").replace("]", " ").replace(",", "");
+		return "\nTitle: " + title + ", Release Year: " + releaseYear + ", Rating: " + rating + ", Language: "
+				+ langName + ", Description: " + description + "\nCast: " + cleanCast;
 	}
 
 	@Override

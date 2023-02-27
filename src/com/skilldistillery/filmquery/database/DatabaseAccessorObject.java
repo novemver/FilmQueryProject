@@ -50,14 +50,11 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 	@Override
 	public Film findFilmById(int filmId) {
 		Film film = null;
-
 		String sql = "SELECT film.*, language.name " + "FROM film JOIN language ON language.id = language_id "
 				+ "WHERE film.id LIKE ?";
-
 		try {
 			Connection conn = DriverManager.getConnection(URL, user, pass);
 			PreparedStatement stmt = conn.prepareStatement(sql);
-
 			stmt.setInt(1, filmId);
 			ResultSet filmResult = stmt.executeQuery();
 
@@ -76,7 +73,6 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 	@Override
 	public List<Actor> findActorsByFilmId(int filmId) {
 		List<Actor> actors = new ArrayList<>();
-
 		try {
 			Connection conn = DriverManager.getConnection(URL, user, pass);
 			String sql = "SELECT id, first_name, last_name "
@@ -91,7 +87,6 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 				String firstName = rs.getString("first_name");
 				String lastName = rs.getString("last_name");
 				Actor actor = new Actor(actorId, firstName, lastName);
-
 				actors.add(actor);
 			}
 			rs.close();
@@ -101,44 +96,6 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 			e.printStackTrace();
 		}
 		return actors;
-	}
-
-	@Override
-	public List<Film> findFilmsByActorId(int actorId) {
-		List<Film> films = new ArrayList<>();
-		try {
-			Connection conn = DriverManager.getConnection(URL, user, pass);
-			String sql = "SELECT id, title, description, release_year, language.name, rental_duration, ";
-			sql += " rental_rate, length, replacement_cost, rating, special_features "
-					+ " FROM film JOIN film_actor ON film.id = film_actor.film_id " + " WHERE actor_id = ?";
-			PreparedStatement stmt = conn.prepareStatement(sql);
-			stmt.setInt(1, actorId);
-			ResultSet rs = stmt.executeQuery();
-
-			while (rs.next()) {
-				int filmId = rs.getInt("id");
-				String title = rs.getString("title");
-				String desc = rs.getString("description");
-				short releaseYear = rs.getShort("release_year");
-				String langName = rs.getString("language.name");
-				int rentDur = rs.getInt("rental_duration");
-				double rate = rs.getDouble("rental_rate");
-				Integer length = rs.getInt("length");
-				Double repCost = rs.getDouble("replacement_cost");
-				String rating = rs.getString("rating");
-				String features = rs.getString("special_features");
-
-				Film film = new Film(filmId, title, desc, releaseYear, langName, rentDur, rate, length, repCost, rating,
-						features);
-				films.add(film);
-			}
-			rs.close();
-			stmt.close();
-			conn.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return films;
 	}
 
 	@Override
@@ -175,6 +132,43 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 			e.printStackTrace();
 		}
 		return filmWord;
+	}
+
+	@Override
+	public List<Film> findFilmsByActorId(int actorId) {
+		List<Film> films = new ArrayList<>();
+		try {
+			Connection conn = DriverManager.getConnection(URL, user, pass);
+			String sql = "SELECT id, title, description, release_year, language.name, rental_duration, ";
+			sql += " rental_rate, length, replacement_cost, rating, special_features "
+					+ " FROM film JOIN film_actor ON film.id = film_actor.film_id " + " WHERE actor_id = ?";
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, actorId);
+			ResultSet rs = stmt.executeQuery();
+
+			while (rs.next()) {
+				int filmId = rs.getInt("id");
+				String title = rs.getString("title");
+				String desc = rs.getString("description");
+				short releaseYear = rs.getShort("release_year");
+				String langName = rs.getString("language.name");
+				int rentDur = rs.getInt("rental_duration");
+				double rate = rs.getDouble("rental_rate");
+				Integer length = rs.getInt("length");
+				Double repCost = rs.getDouble("replacement_cost");
+				String rating = rs.getString("rating");
+				String features = rs.getString("special_features");
+				Film film = new Film(filmId, title, desc, releaseYear, langName, rentDur, rate, length, repCost, rating,
+						features);
+				films.add(film);
+			}
+			rs.close();
+			stmt.close();
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return films;
 	}
 
 }
